@@ -36,7 +36,7 @@ function Login({ onLogin, message }) {
   return (
     <main className="login">
       <form className="panel" onSubmit={submit}>
-        <h1>Kenya Power chatbot admin</h1>
+        <h1>KPLC chatbot admin</h1>
         <p className="dim">Enter the admin token to edit the knowledge base and read chat logs. It stays in this tab only.</p>
         <input type="password" autoFocus autoComplete="off" placeholder="Admin token" value={value} onChange={(e) => setValue(e.target.value)} aria-label="Admin token" />
         {err && <div className="notice alert" role="alert">{err}</div>}
@@ -134,9 +134,9 @@ export default function App() {
   return (
     <div className="shell">
       <header className="topbar">
-        <div>
-          <div className="brand">KPLC chatbot admin</div>
-          <div className="dim small mono">{gatewayUrl}</div>
+        <div className="brand">
+          <span className="brand-name">KPLC chatbot admin</span>
+          <span className="brand-sub mono">{gatewayUrl || "VITE_API_URL not set"}</span>
         </div>
         <div className="row">
           <span className="chip" data-tone={tone}>{label}</span>
@@ -157,6 +157,9 @@ export default function App() {
       {tab === "chunks"
         ? <Chunks ready={status === "ready"} onAuthError={expired} />
         : <Logs onAuthError={expired} />}
+
+      <hr className="tear" />
+      <footer className="foot">session status is polled every few seconds while the model is starting</footer>
     </div>
   );
 }
