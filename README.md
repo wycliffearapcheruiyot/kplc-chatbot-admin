@@ -8,6 +8,7 @@ React (Vite) admin for the Kenya Power chatbot gateway. Deploys to Netlify.
 
 - **Knowledge base**: search, edit and save chunks. Each shows *Searchable* or *Needs embedding*. If the model session is live, saving re-embeds automatically; otherwise use **Embed pending** later. **Re-embed all** forces every chunk.
 - **Chat logs**: newest conversations, with the chunk ids retrieved for each answer.
+- **Environment**: edit the environment variables of every service (gateway, session backend, dataset backend, KB builder) in one place. Values are stored in MongoDB and the services read them at runtime, so there is no redeploy. Each variable shows where its value comes from (*Override*, *From env*, *Default*), a **Reset to env** button, and when the change applies. Secrets are shown in full. Build-time variables (this panel's `VITE_*`, the chatbot's `NEXT_PUBLIC_*`, `MONGODB_URI`, `PYTHON_VERSION`) are listed read-only. See the gateway README for details and caveats.
 - **Model status** in the top bar polls `/session/status` every 5 s, with a **Start model** button, because embedding only works while a Kaggle session is `ready`.
 
 ## Warm-up first
@@ -28,5 +29,6 @@ npm run dev              # http://localhost:3000 (always allowed by the gateway'
 
 ## Security notes
 - The admin token is **not** an environment variable. You type it into the login box; it is kept in `sessionStorage` (cleared when the tab closes) and sent as `X-Admin-Token` on admin requests.
+- Changing `ADMIN_TOKEN` in the Environment tab signs other admin sessions out; this tab keeps working with the new token.
 - A 401 from the gateway signs you out; a 503 means `ADMIN_TOKEN` isn't set on the gateway.
 - `index.html` sets `noindex`, but the page is still public: the token is the only lock.

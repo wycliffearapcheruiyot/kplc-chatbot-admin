@@ -8,6 +8,10 @@ const DATASET_URL = (import.meta.env.VITE_DATASET_BACKEND_URL || "").replace(/\/
 
 export const gatewayUrl = BASE;
 
+// What THIS deployment was built with (VITE_ values are baked in at build time).
+// The Environment tab shows them read-only next to the services' editable settings.
+export const buildEnv = import.meta.env;
+
 export function getToken() {
   try { return sessionStorage.getItem(KEY) || ""; } catch { return ""; }
 }
@@ -48,6 +52,11 @@ export const api = {
   saveChunk: (id, text) => call(`/chunks/${encodeURIComponent(id)}`, { method: "PUT", body: { text } }),
   embed: (force = false) => call(`/chunks/embed${force ? "?force=true" : ""}`, { method: "POST" }),
   logs: (limit = 50) => call(`/chat_logs?limit=${limit}`),
+  // Environment variables of every service. Overrides live in MongoDB and the
+  // services read them at runtime (see the gateway's settings_routes.py).
+  settings: () => call("/settings"),
+  saveSettings: (service, { set = {}, reset = [] }) =>
+    call(`/settings/${encodeURIComponent(service)}`, { method: "PUT", body: { set, reset } }),
   status: () => call("/session/status", { admin: false }),
   start: () => call("/session/start", { method: "POST", admin: false }),
 };

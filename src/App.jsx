@@ -3,6 +3,7 @@ import { api, getToken, setToken, gatewayUrl, warmBackends, warmTargets } from "
 import Warmup from "./Warmup.jsx";
 import Chunks from "./Chunks.jsx";
 import Logs from "./Logs.jsx";
+import Settings from "./Settings.jsx";
 
 const STATUS = {
   idle: ["Model off", ""],
@@ -149,14 +150,14 @@ export default function App() {
       {startErr && <div className="notice alert" style={{ marginTop: 14 }}>{startErr}</div>}
 
       <nav className="tabs" role="tablist">
-        {[["chunks", "Knowledge base"], ["logs", "Chat logs"]].map(([k, name]) => (
+        {[["chunks", "Knowledge base"], ["logs", "Chat logs"], ["env", "Environment"]].map(([k, name]) => (
           <button key={k} role="tab" aria-selected={tab === k} onClick={() => setTab(k)}>{name}</button>
         ))}
       </nav>
 
-      {tab === "chunks"
-        ? <Chunks ready={status === "ready"} onAuthError={expired} />
-        : <Logs onAuthError={expired} />}
+      {tab === "chunks" && <Chunks ready={status === "ready"} onAuthError={expired} />}
+      {tab === "logs" && <Logs onAuthError={expired} />}
+      {tab === "env" && <Settings onAuthError={expired} />}
 
       <hr className="tear" />
       <footer className="foot">session status is polled every few seconds while the model is starting</footer>
